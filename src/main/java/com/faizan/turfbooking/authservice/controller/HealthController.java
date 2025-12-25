@@ -10,6 +10,7 @@ import com.faizan.turfbooking.authservice.dto.CreateUserRequest;
 import com.faizan.turfbooking.authservice.dto.CreateUserResponse;
 import com.faizan.turfbooking.authservice.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +33,12 @@ public class HealthController {
 	
 	
 	@PostMapping("/users")
-	public CreateUserResponse createUser(@RequestBody CreateUserRequest request) {
+	public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
 		log.info("successfullly running ");
 		CreateUserResponse response=	userService.createUser(request);
 		log.info("created data {}", response);
 		return response;
-	}
+	}	
 	
 
 
