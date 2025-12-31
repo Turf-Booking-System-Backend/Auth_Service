@@ -1,4 +1,4 @@
-package com.faizan.turfbooking.auth_service;
+package com.faizan.turfbooking.authservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.faizan.turfbooking.auth_service;
+package com.faizan.turfbooking.authservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
