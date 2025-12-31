@@ -3,6 +3,7 @@ package com.faizan.turfbooking.authservice.exceptinon;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,24 +19,42 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	public ResponseEntity<ErrorResponse> authExceptionHandler(AuthException ex) {
 		
-		ErrorResponse  response = new ErrorResponse(
+		ErrorResponse  message = new ErrorResponse(
 				ex.getErrorCode(),
 				ex.getErrorMessage()
 				);
 		
 		log.info("error handled ");
 		
-		return new ResponseEntity<>(response, ex.getHttpStatus());
+		return new ResponseEntity<>(message, ex.getHttpStatus());
 		
 	
 		
+	}	  // dto validation 
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+	        MethodArgumentNotValidException ex) {
+
+	    String message = ex.getBindingResult()
+	            .getFieldErrors()
+	            .get(0)
+	            .getDefaultMessage();
+
+	    return new ResponseEntity<>(
+	            new ErrorResponse("4000", message),
+	            HttpStatus.BAD_REQUEST
+	    );
 	}
+
+	
+//	   url/ params validation error 
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
 		
-		String errorMessage = ex.getConstraintViolations().iterator().next().getMessage();
+		String message = ex.getConstraintViolations().iterator().next().getMessage();
 		
-		ErrorResponse response= new ErrorResponse("4000", errorMessage);	
+		ErrorResponse response= new ErrorResponse("4000", message);	
 		log.info("error handled ");
 		
 		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);

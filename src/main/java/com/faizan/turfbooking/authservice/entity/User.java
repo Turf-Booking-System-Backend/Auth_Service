@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.faizan.turfbooking.authservice.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,20 +25,20 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank( message = "Name is required")
+	
 	private String name;
 	
-	//@NotBlank(message = "Email is required")
+
 	@Column(unique=true)
 	private String email;
 	
-	//@NotBlank(message = "password is required")
 	@Column(nullable = false)
-    private String password;
+		private String password;
 	
 	
-
-	private String role;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
 	
 	@CreationTimestamp // Automatically sets the time when a record is created
     @Column(updatable = false)
