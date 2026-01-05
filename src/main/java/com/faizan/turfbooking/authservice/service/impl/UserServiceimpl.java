@@ -10,9 +10,11 @@ import com.faizan.turfbooking.authservice.constant.ErrorCodeEnum;
 import com.faizan.turfbooking.authservice.dto.CreateUserRequest;
 import com.faizan.turfbooking.authservice.dto.CreateUserResponse;
 import com.faizan.turfbooking.authservice.dto.LoginRequest;
+import com.faizan.turfbooking.authservice.dto.LoginResponse;
 import com.faizan.turfbooking.authservice.entity.User;
 import com.faizan.turfbooking.authservice.enums.Role;
 import com.faizan.turfbooking.authservice.exceptinon.AuthException;
+import com.faizan.turfbooking.authservice.jwt.JwtUtil;
 import com.faizan.turfbooking.authservice.repository.UserRepository;
 import com.faizan.turfbooking.authservice.service.UserService;
 
@@ -29,6 +31,8 @@ public class UserServiceimpl implements UserService {
 	private final BCryptPasswordEncoder passwordEncoder;
 	
 	private final UserRepository userRepository;
+	
+	private final JwtUtil jwtUtil;
 	
 	public CreateUserResponse createUser(CreateUserRequest request) {
 		
@@ -79,7 +83,7 @@ public class UserServiceimpl implements UserService {
 	}
 	
 	
-	public String loginUser(LoginRequest request) {
+	public LoginResponse loginUser(LoginRequest request) {
 		
 		log.info("login user info {}", request);
 		
@@ -109,8 +113,13 @@ public class UserServiceimpl implements UserService {
 					HttpStatus.UNAUTHORIZED
 			 );
 		}	
+		
+		
+		String token = jwtUtil.generateToken(user.getEmail(),user.getRole().name());
+		return new LoginResponse(token);
+
 				
-		return "login successfull";
+		
 	}
 
 }

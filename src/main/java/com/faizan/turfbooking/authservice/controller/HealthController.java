@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.faizan.turfbooking.authservice.dto.CreateUserRequest;
 import com.faizan.turfbooking.authservice.dto.CreateUserResponse;
 import com.faizan.turfbooking.authservice.dto.LoginRequest;
+import com.faizan.turfbooking.authservice.dto.LoginResponse;
 import com.faizan.turfbooking.authservice.service.UserService;
 
 import jakarta.validation.Valid;
@@ -42,10 +43,11 @@ public class HealthController {
 	}	
 	
 	@PostMapping("/login")
-	public String loginUser(@Valid @RequestBody LoginRequest request) {
+	public LoginResponse loginUser(@Valid @RequestBody LoginRequest request) {
 		log.info("login user");
 		
-	return userService.loginUser(request);
+	LoginResponse response=	userService.loginUser(request);
+	return response;
 		
 	}
 	
