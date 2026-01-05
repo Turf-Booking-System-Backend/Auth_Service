@@ -34,9 +34,9 @@ public class SecurityConfig {
             // 3️ Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/api/login",
-                    "/api/users",
-                    "/health"
+                    "/v1/auth/login",
+                    "/v1/auth/users",
+                    "/v1/auth/health"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

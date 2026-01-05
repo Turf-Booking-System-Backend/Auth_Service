@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.faizan.turfbooking.authservice.constant.Constant;
 import com.faizan.turfbooking.authservice.dto.CreateUserRequest;
 import com.faizan.turfbooking.authservice.dto.CreateUserResponse;
 import com.faizan.turfbooking.authservice.dto.LoginRequest;
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(Constant.AUTH)
 @Slf4j
 @RequiredArgsConstructor
 public class HealthController {
@@ -25,16 +26,13 @@ public class HealthController {
 	private final UserService userService;
 	
 
-	@GetMapping("/health")
+	@GetMapping(Constant.HEALTH)
 	public String health() {
 		
 		return"auth service is running";
 	}
-	
-	
-	
-	
-	@PostMapping("/users")
+		
+	@PostMapping(Constant.USERS)
 	public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest request) {
 		log.info("successfullly running ");
 		CreateUserResponse response=	userService.createUser(request);
@@ -42,7 +40,7 @@ public class HealthController {
 		return response;
 	}	
 	
-	@PostMapping("/login")
+	@PostMapping(Constant.LOGIN)
 	public LoginResponse loginUser(@Valid @RequestBody LoginRequest request) {
 		log.info("login user");
 		

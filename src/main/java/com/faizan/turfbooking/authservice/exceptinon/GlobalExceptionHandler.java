@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.faizan.turfbooking.authservice.constant.ErrorCodeEnum;
 import com.faizan.turfbooking.authservice.dto.ErrorResponse;
 
 import jakarta.validation.ConstraintViolationException;
@@ -61,11 +63,24 @@ public class GlobalExceptionHandler {
 				
 				
 	}
+	// resource not found excepiton 
+	@ExceptionHandler(NoHandlerFoundException.class)
 	
+	public ResponseEntity<ErrorResponse> handleNotFount(NoHandlerFoundException ex) {
+		
+		log.info("error handle 404 url not found ");
+		
+		ErrorResponse response = new ErrorResponse(
+				ErrorCodeEnum.RESOURCE_NOT_FOUND.getErrorCode(),
+				ErrorCodeEnum.RESOURCE_NOT_FOUND.getErrorMessage());
+		
+		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+		
+	}
 	
 	// handle generic exception
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex) {
+	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex){
 		
 		ErrorResponse response = new ErrorResponse(
 				"4000",
