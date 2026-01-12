@@ -3,26 +3,38 @@ package com.faizan.turfbooking.authservice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.faizan.turfbooking.authservice.jwt.JwtFilter;
+import com.faizan.turfbooking.authservice.security.CustomAccessDeniedHandler;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@EnableMethodSecurity
+@RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final JwtFilter jwtAuthenticationFilter;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    public SecurityConfig(JwtFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+  
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http
+    	
+    	     http
+    	    
+            
             // 1️ Disabled CSRF (it not needed for REST APIs)
             .csrf(csrf -> csrf.disable())
 
@@ -30,13 +42,18 @@ public class SecurityConfig {
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
+            // handle exception wrong role and token 
+           
+            .exceptionHandling(ex -> ex
+	    	        .authenticationEntryPoint(authenticationEntryPoint)
+	    	        .accessDeniedHandler(accessDeniedHandler)
+	    	    )
             // 3️ Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/v1/auth/login",
+                    "/v1/auth/login",	
                     "/v1/auth/users",
-                    "/v1/auth/health"
+                    "/health"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -52,4 +69,10 @@ public class SecurityConfig {
 
         return http.build();
     }
+    
+    @PostConstruct
+    public void checkMethodSecurity() {
+        log.info("METHOD SECURITY ENABLED");
+    }
+
 }

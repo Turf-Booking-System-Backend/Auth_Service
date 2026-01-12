@@ -21,6 +21,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	public ResponseEntity<ErrorResponse> authExceptionHandler(AuthException ex) {
 		
+		
+		
 		ErrorResponse  message = new ErrorResponse(
 				ex.getErrorCode(),
 				ex.getErrorMessage()
@@ -80,10 +82,17 @@ public class GlobalExceptionHandler {
 	
 	// handle generic exception
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex){
+	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex) throws Exception{
+		
+		 // VERY IMPORTANT: let Spring Security handle auth errors
+	    if (ex instanceof org.springframework.security.access.AccessDeniedException
+	        || ex instanceof org.springframework.security.core.AuthenticationException) {
+	        throw ex;
+	    }
+
 		
 		ErrorResponse response = new ErrorResponse(
-				"4000",
+				"5000",
 				"generic : some went wrong");
 		
 		log.info(" generic error handled ");

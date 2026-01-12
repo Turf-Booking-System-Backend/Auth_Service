@@ -26,7 +26,7 @@ public class JwtUtil {
 		this.signingKey = Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
 	}
 
-	// 2️⃣ Generate token
+	//  Generate token
 	public String generateToken(String email, String role) {
 
 		Date now = new Date();
