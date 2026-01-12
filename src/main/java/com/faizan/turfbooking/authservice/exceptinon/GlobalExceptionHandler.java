@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.faizan.turfbooking.authservice.constant.ErrorCodeEnum;
 import com.faizan.turfbooking.authservice.dto.ErrorResponse;
 
 import jakarta.validation.ConstraintViolationException;
@@ -18,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	public ResponseEntity<ErrorResponse> authExceptionHandler(AuthException ex) {
+		
+		
 		
 		ErrorResponse  message = new ErrorResponse(
 				ex.getErrorCode(),
@@ -61,14 +65,34 @@ public class GlobalExceptionHandler {
 				
 				
 	}
+	// resource not found excepiton 
+	@ExceptionHandler(NoHandlerFoundException.class)
 	
+	public ResponseEntity<ErrorResponse> handleNotFount(NoHandlerFoundException ex) {
+		
+		log.info("error handle 404 url not found ");
+		
+		ErrorResponse response = new ErrorResponse(
+				ErrorCodeEnum.RESOURCE_NOT_FOUND.getErrorCode(),
+				ErrorCodeEnum.RESOURCE_NOT_FOUND.getErrorMessage());
+		
+		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+		
+	}
 	
 	// handle generic exception
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex) {
+	public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex) throws Exception{
+		
+		 // VERY IMPORTANT: let Spring Security handle auth errors
+	    if (ex instanceof org.springframework.security.access.AccessDeniedException
+	        || ex instanceof org.springframework.security.core.AuthenticationException) {
+	        throw ex;
+	    }
+
 		
 		ErrorResponse response = new ErrorResponse(
-				"4000",
+				"5000",
 				"generic : some went wrong");
 		
 		log.info(" generic error handled ");

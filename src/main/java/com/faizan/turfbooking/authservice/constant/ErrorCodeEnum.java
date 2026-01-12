@@ -12,6 +12,7 @@ public enum ErrorCodeEnum {
 		PASSWORD_VALIDATION_ERROR("4005","Password Must be Greater than 8 characters "),
 		INVALID_EMAIL("4006","Invalid Email. Please Enter Valid Email"),
 		EMAIL_NOT_FOUND("4006","Email Not Found"),
+		RESOURCE_NOT_FOUND("4040","Invalid url or Resource Not Found"),
 		LOGIN_ERROR("4007","Invalid Email or Password.");
 	private String errorCode;
 	private String errorMessage;
