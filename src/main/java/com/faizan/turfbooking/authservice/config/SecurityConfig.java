@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/v1/auth/login",	
                     "/v1/auth/users",
-                    "/health"
+                    "/v1/auth/health"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

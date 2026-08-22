@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CreateUserRequest {
 	
-	@NotBlank(message = "Name ssis Required")
+	@NotBlank(message = "Name is Required")
 	private String name;
 	
 	@NotBlank(message = "Email is Required")

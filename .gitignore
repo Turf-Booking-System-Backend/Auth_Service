@@ -48,3 +48,8 @@ Thumbs.db
 *.mov
 *.wmv
 
+# ==============================
+# Local Spring Boot configuration
+# ==============================
+
+**/application-local.properties
